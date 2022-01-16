@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:  
+  name: nodejs-deployment  
+  labels:    
+    app: mycoinbase
+spec:  
+  replicas: 1  
+  selector:    
+    matchLabels:
+      app: mycoinbase
+  template:
+    metadata:
+      labels:
+        app: mycoinbase
+    spec: 
+     containers:
+      - name: mycoinbase
+        image: mycoinbase:mycoinbase
+        ports:
+        - containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejs-service
+  labels:
+    app: mycoinbase
+spec:
+  type: NodePort
+  ports:
+  - port: 8081
+    protocol: TCP
+    targetPort: 8081
+    nodePort: 32121
+  selector:
+    app: mycoinbase
